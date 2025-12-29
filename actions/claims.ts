@@ -120,3 +120,34 @@ export async function createClaimAction(formData: ClaimFormData) {
     };
   }
 }
+
+/**
+ * 현재 세션 사용자의 가장 최근 청구서 정보를 가져옵니다.
+ */
+export async function getLatestClaimAction() {
+  try {
+    const session = await getSession();
+    if (!session || !session.userId) {
+      return { success: false, message: "인증되지 않은 사용자입니다." };
+    }
+
+    const supabase = createClient(await cookies());
+
+    const { data, error } = await supabase
+      .from("insurance_claims")
+      .select("id")
+      .eq("user_id", session.userId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("최신 청구서 조회 실패:", error);
+      return { success: false, message: "청구서 내역이 없습니다." };
+    }
+
+    return { success: true, data, userId: session.userId };
+  } catch (error: any) {
+    return { success: false, message: "청구서 정보를 불러오는 중 오류가 발생했습니다." };
+  }
+}
