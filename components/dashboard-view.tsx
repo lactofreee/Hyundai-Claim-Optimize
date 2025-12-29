@@ -12,8 +12,19 @@ import { useState } from "react"
 
 export function DashboardView() {
   const router = useRouter()
-  const { currentStep, resetProgress, completedTasks, completeTask } = useProgress()
+  const { currentStep, resetProgress, completedTasks, completeTask, caseNumber, accidentDate } = useProgress()
   const [isCallDrawerOpen, setIsCallDrawerOpen] = useState(false)
+
+  // Format Date for display
+  const formattedDate = accidentDate ? new Date(accidentDate).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  }) : "접수 대기 중"
+
   return (
     <div className="space-y-4 pb-20 md:pb-0">
       {/* 접수 정보 카드 */}
@@ -21,11 +32,11 @@ export function DashboardView() {
         <CardContent className="p-5 space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground font-medium">접수 번호</span>
-            <span className="font-semibold">2512051243 대인 02</span>
+            <span className="font-semibold">{caseNumber || "접수 대기 중"}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground font-medium">사고 일시</span>
-            <span className="font-semibold">2025-12-15(월) 11:11</span>
+            <span className="font-semibold">{formattedDate}</span>
           </div>
         </CardContent>
       </Card>

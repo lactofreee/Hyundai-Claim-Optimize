@@ -21,6 +21,7 @@ import { ProgressProvider } from "@/components/progress-provider";
 
 import { getSession } from "@/actions/auth";
 import { getProgressAction } from "@/actions/progress";
+import { getLatestClaimAction } from "@/actions/claims";
 
 export default async function RootLayout({
   children,
@@ -29,6 +30,9 @@ export default async function RootLayout({
 }>) {
   const session = await getSession();
   const progress = await getProgressAction();
+  const claimResult = await getLatestClaimAction();
+
+  const claimData = claimResult.success ? claimResult.data : null;
 
   return (
     <html lang="en">
@@ -39,6 +43,8 @@ export default async function RootLayout({
           initialUserName={session.isLoggedIn ? session.name : undefined}
           initialCurrentStep={progress?.current_step ?? 0}
           initialCompletedTasks={progress?.completed_tasks as any ?? []} // Casting as any for TasksId[] compatibility check
+          initialCaseNumber={claimData?.case_number}
+          initialAccidentDate={claimData?.accident_date}
         >
           {children}
         </ProgressProvider>

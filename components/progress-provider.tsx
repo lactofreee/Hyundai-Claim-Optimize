@@ -11,6 +11,7 @@ interface ProgressContextType {
   resetProgress: () => void
   userName: string
   caseNumber: string
+  accidentDate: string
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined)
@@ -19,15 +20,21 @@ export function ProgressProvider({
   children,
   initialUserName,
   initialCurrentStep = 0,
-  initialCompletedTasks = []
+  initialCompletedTasks = [],
+  initialCaseNumber,
+  initialAccidentDate
 }: {
   children: React.ReactNode,
   initialUserName?: string,
   initialCurrentStep?: number,
   initialCompletedTasks?: TaskId[]
+  initialCaseNumber?: string
+  initialAccidentDate?: string
 }) {
   const [currentStep, setCurrentStep] = useState(initialCurrentStep)
   const [completedTasks, setCompletedTasks] = useState<TaskId[]>(initialCompletedTasks)
+  const [caseNumber] = useState(initialCaseNumber || "2512051243-02") // Fallback for dev
+  const [accidentDate] = useState(initialAccidentDate || "2025-12-15T11:11") // Fallback for dev
 
   const completeTask = async (taskId: TaskId) => {
     if (completedTasks.includes(taskId)) return
@@ -52,8 +59,6 @@ export function ProgressProvider({
 
     // Sync to DB
     try {
-      // Dynamic import to avoid server-action issues if context needs to be pure? 
-      // Actually standard import is fine for client components invoking server actions.
       const { updateProgressAction } = await import("@/actions/progress")
       await updateProgressAction(nextStep, newTasks)
     } catch (error) {
@@ -64,8 +69,6 @@ export function ProgressProvider({
   const resetProgress = () => {
     setCurrentStep(0)
     setCompletedTasks([])
-    // We might want to clear DB progress too, but spec didn't strictly say. 
-    // For now, let's keep it local reset or implement db reset action if needed.
   }
 
   return (
@@ -75,7 +78,8 @@ export function ProgressProvider({
       completeTask,
       resetProgress,
       userName: initialUserName || "김현대",
-      caseNumber: "2512051243 대인 02"
+      caseNumber,
+      accidentDate
     }}>
       {children}
     </ProgressContext.Provider>

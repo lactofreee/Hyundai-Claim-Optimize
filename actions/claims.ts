@@ -135,14 +135,14 @@ export async function getLatestClaimAction() {
 
     const { data, error } = await supabase
       .from("insurance_claims")
-      .select("id")
+      .select("id, case_number, accident_date, created_at, name")
       .eq("user_id", session.userId)
       .order("created_at", { ascending: false })
       .limit(1)
       .single();
 
     if (error) {
-      console.error("최신 청구서 조회 실패:", error);
+      // console.error("최신 청구서 조회 실패:", error); // 조용한 실패 처리
       return { success: false, message: "청구서 내역이 없습니다." };
     }
 
