@@ -9,20 +9,23 @@ import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ChevronLeft, CheckCircle2, User, Car, FileText, Stethoscope } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 import { useProgress } from "@/components/progress-provider"
+import { createClaimAction } from "@/actions/claims"
 
 export default function ClaimWritePage() {
   const router = useRouter()
-  const { completeTask } = useProgress()
+  const { completeTask, userName, caseNumber } = useProgress()
   const [step, setStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   // Form State
   const [formData, setFormData] = useState({
     // Step 1: Personal
-    name: "김현대",
+    name: userName || "김현대",
     rrnFront: "",
     rrnBack: "",
     address: "",
@@ -40,13 +43,38 @@ export default function ClaimWritePage() {
     firstVisitDate: "",
   })
 
+  // Sync name if userName becomes available later
+  useEffect(() => {
+    if (userName && formData.name !== userName) {
+      setFormData(prev => ({ ...prev, name: userName }))
+    }
+  }, [userName])
+
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 3) {
-      completeTask("claim-write")
+      setIsSubmitting(true)
+      setSubmitError(null)
+      try {
+        const result = await createClaimAction({
+          ...formData,
+          caseNumber
+        } as any);
+        if (result.success) {
+          completeTask("claim-write")
+          setStep(4)
+        } else {
+          setSubmitError(result.message || "입력 정보를 다시 확인해주세요.");
+        }
+      } catch (err) {
+        setSubmitError("서버와의 통신 중 오류가 발생했습니다.");
+      } finally {
+        setIsSubmitting(false)
+      }
+      return
     }
     setStep(prev => prev + 1)
     window.scrollTo(0, 0)
@@ -107,9 +135,9 @@ export default function ClaimWritePage() {
 
             <div className="space-y-5">
               <div className="space-y-2">
-                <Label className="text-slate-600">접수번호</Label>
+                <Label className="text-slate-600">접수 번호</Label>
                 <div className="h-12 w-full rounded-xl bg-stone-50 border border-stone-200 flex items-center px-4 font-bold text-slate-500">
-                  2512051243-02
+                  {caseNumber}
                 </div>
               </div>
 
@@ -328,8 +356,8 @@ export default function ClaimWritePage() {
             <Card className="w-full bg-stone-50 border-stone-100 mt-8">
               <CardContent className="p-4 space-y-2 text-sm text-left">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">접수번호</span>
-                  <span className="font-bold">2512051243-02</span>
+                  <span className="text-muted-foreground">접수 번호</span>
+                  <span className="font-bold">{caseNumber}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">이름</span>
@@ -349,12 +377,20 @@ export default function ClaimWritePage() {
       {/* Bottom CTA (Navigation) */}
       <div className="sticky bottom-0 bg-white border-t border-stone-100 p-4 safe-area-bottom">
         {step < 4 ? (
-          <Button
-            className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-lg shadow-indigo-200"
-            onClick={handleNext}
-          >
-            {step === 3 ? "제출하기" : "다음"}
-          </Button>
+          <>
+            <Button
+              className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-lg shadow-indigo-200"
+              onClick={handleNext}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "제출 중..." : (step === 3 ? "제출하기" : "다음")}
+            </Button>
+            {submitError && (
+              <p className="text-red-500 text-sm mt-2 text-center font-medium animate-in fade-in slide-in-from-top-1">
+                {submitError}
+              </p>
+            )}
+          </>
         ) : (
           <Button
             className="w-full h-14 text-lg font-bold rounded-xl bg-stone-900 hover:bg-stone-800 shadow-lg"

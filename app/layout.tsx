@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 import { ProgressProvider } from "@/components/progress-provider";
 
 import { getSession } from "@/actions/auth";
+import { getProgressAction } from "@/actions/progress";
 
 export default async function RootLayout({
   children,
@@ -27,13 +28,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
+  const progress = await getProgressAction();
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ProgressProvider initialUserName={session.isLoggedIn ? session.name : undefined}>
+        <ProgressProvider
+          initialUserName={session.isLoggedIn ? session.name : undefined}
+          initialCurrentStep={progress?.current_step ?? 0}
+          initialCompletedTasks={progress?.completed_tasks as any ?? []} // Casting as any for TasksId[] compatibility check
+        >
           {children}
         </ProgressProvider>
       </body>

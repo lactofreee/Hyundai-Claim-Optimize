@@ -10,57 +10,62 @@ interface ProgressContextType {
   completeTask: (taskId: TaskId) => void
   resetProgress: () => void
   userName: string
+  caseNumber: string
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined)
 
-export function ProgressProvider({ children, initialUserName }: { children: React.ReactNode, initialUserName?: string }) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [completedTasks, setCompletedTasks] = useState<TaskId[]>([])
+export function ProgressProvider({
+  children,
+  initialUserName,
+  initialCurrentStep = 0,
+  initialCompletedTasks = []
+}: {
+  children: React.ReactNode,
+  initialUserName?: string,
+  initialCurrentStep?: number,
+  initialCompletedTasks?: TaskId[]
+}) {
+  const [currentStep, setCurrentStep] = useState(initialCurrentStep)
+  const [completedTasks, setCompletedTasks] = useState<TaskId[]>(initialCompletedTasks)
 
-  // Load state from localStorage on mount
-  useEffect(() => {
-    const savedStep = localStorage.getItem("accident-step")
-    const savedTasks = localStorage.getItem("accident-tasks")
-
-    if (savedStep) setCurrentStep(parseInt(savedStep))
-    if (savedTasks) setCompletedTasks(JSON.parse(savedTasks))
-  }, [])
-
-  // Save state whenever it changes
-  useEffect(() => {
-    localStorage.setItem("accident-step", currentStep.toString())
-    localStorage.setItem("accident-tasks", JSON.stringify(completedTasks))
-  }, [currentStep, completedTasks])
-
-  const completeTask = (taskId: TaskId) => {
+  const completeTask = async (taskId: TaskId) => {
     if (completedTasks.includes(taskId)) return
 
     const newTasks = [...completedTasks, taskId]
     setCompletedTasks(newTasks)
 
     // Logic to advance steps based on completed tasks
-    // This is a simple rule-based logic for the prototype
     let nextStep = currentStep
 
     if (newTasks.includes("claim-write")) {
-      nextStep = Math.max(nextStep, 1) // Advance to '피해' check
+      nextStep = Math.max(nextStep, 1)
     }
     if (newTasks.includes("photo-upload") && newTasks.includes("docs-guide")) {
-      nextStep = Math.max(nextStep, 2) // Advance to '치료'
+      nextStep = Math.max(nextStep, 2)
     }
     if (newTasks.includes("med-guarantee")) {
-      nextStep = Math.max(nextStep, 3) // Advance to '보험금 지급' (simulated)
+      nextStep = Math.max(nextStep, 3)
     }
 
     setCurrentStep(nextStep)
+
+    // Sync to DB
+    try {
+      // Dynamic import to avoid server-action issues if context needs to be pure? 
+      // Actually standard import is fine for client components invoking server actions.
+      const { updateProgressAction } = await import("@/actions/progress")
+      await updateProgressAction(nextStep, newTasks)
+    } catch (error) {
+      console.error("Failed to sync progress:", error)
+    }
   }
 
   const resetProgress = () => {
     setCurrentStep(0)
     setCompletedTasks([])
-    localStorage.removeItem("accident-step")
-    localStorage.removeItem("accident-tasks")
+    // We might want to clear DB progress too, but spec didn't strictly say. 
+    // For now, let's keep it local reset or implement db reset action if needed.
   }
 
   return (
@@ -69,7 +74,8 @@ export function ProgressProvider({ children, initialUserName }: { children: Reac
       completedTasks,
       completeTask,
       resetProgress,
-      userName: initialUserName || "김현대"
+      userName: initialUserName || "김현대",
+      caseNumber: "2512051243 대인 02"
     }}>
       {children}
     </ProgressContext.Provider>

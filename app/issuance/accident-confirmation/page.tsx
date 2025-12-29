@@ -3,9 +3,12 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronLeft, FileCheck, FileText, CheckCircle2, Car, MapPin, Calendar, Hash } from "lucide-react"
+import { useProgress } from "@/components/progress-provider"
 import Link from "next/link"
 
 export default function AccidentConfirmationPage() {
+  const { caseNumber } = useProgress()
+
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col font-sans text-slate-900">
       {/* Header */}
@@ -54,7 +57,7 @@ export default function AccidentConfirmationPage() {
                 <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                   <Hash className="w-3.5 h-3.5" /> 접수 번호
                 </p>
-                <p className="font-bold text-slate-800 text-sm">2512051243-02</p>
+                <p className="font-bold text-slate-800 text-sm">{caseNumber}</p>
               </div>
 
               <div className="space-y-1">

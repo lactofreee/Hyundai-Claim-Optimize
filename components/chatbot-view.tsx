@@ -15,6 +15,10 @@ interface Message {
   content: string
 }
 
+import { getChatHistoryAction } from "@/actions/chat";
+
+// ... existing imports
+
 export function ChatbotView() {
   const router = useRouter()
   const { completedTasks, completeTask, userName } = useProgress()
@@ -33,6 +37,25 @@ export function ChatbotView() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
+
+  // Load chat history on mount
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const history = await getChatHistoryAction();
+        if (history && history.length > 0) {
+          setMessages(history.map(msg => ({
+            id: msg.id.toString(),
+            role: msg.role,
+            content: msg.content
+          })));
+        }
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+      }
+    };
+    loadHistory();
+  }, []);
 
   useEffect(() => {
     scrollToBottom()
