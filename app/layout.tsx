@@ -19,17 +19,21 @@ export const metadata: Metadata = {
 
 import { ProgressProvider } from "@/components/progress-provider";
 
-export default function RootLayout({
+import { getSession } from "@/actions/auth";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ProgressProvider>
+        <ProgressProvider initialUserName={session.isLoggedIn ? session.name : undefined}>
           {children}
         </ProgressProvider>
       </body>

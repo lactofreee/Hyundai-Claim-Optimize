@@ -142,11 +142,11 @@ export function DashboardView() {
           {completedTasks.includes("photo-upload") && !completedTasks.includes("docs-guide") && (
             <div
               className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
-              onClick={() => completeTask("docs-guide")}
+              onClick={() => router.push("/claim/docs-guide")}
             >
               <div>
                 <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구 제출서류 안내</p>
-                <p className="text-sm text-slate-500 font-medium">AI 안내 확인 {'>'}</p>
+                <p className="text-sm text-slate-500 font-medium">서류 제출 안내 가기 {'>'}</p>
               </div>
               <div className="flex gap-1 opacity-20">
                 <div className="w-6 h-6 bg-slate-400 rounded-md" />
@@ -158,11 +158,11 @@ export function DashboardView() {
           {completedTasks.includes("docs-guide") && !completedTasks.includes("med-guarantee") && (
             <div
               className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
-              onClick={() => completeTask("med-guarantee")}
+              onClick={() => router.push("/claim/med-guarantee")}
             >
               <div>
                 <p className="font-bold text-lg text-slate-900 mb-1">진료비 지급보증서 요청하기</p>
-                <p className="text-sm text-slate-500 font-medium">발급 요청 {'>'}</p>
+                <p className="text-sm text-slate-500 font-medium">요청 화면 가기 {'>'}</p>
               </div>
               <div className="flex gap-1 opacity-20">
                 <div className="w-6 h-6 bg-slate-400 rounded-full" />
@@ -185,6 +185,7 @@ export function DashboardView() {
           icon={<div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"><Upload className="w-5 h-5 text-gray-500" /></div>}
           title="보험금 청구 제출서류 안내"
           description="사고사진등록, 피해사항등록, 진단서등록, 진료비 지급 보증 요청 등"
+          href="/claim/docs-guide"
         />
       </div>
 

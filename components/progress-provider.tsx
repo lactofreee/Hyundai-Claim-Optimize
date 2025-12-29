@@ -14,7 +14,7 @@ interface ProgressContextType {
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined)
 
-export function ProgressProvider({ children }: { children: React.ReactNode }) {
+export function ProgressProvider({ children, initialUserName }: { children: React.ReactNode, initialUserName?: string }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [completedTasks, setCompletedTasks] = useState<TaskId[]>([])
 
@@ -69,7 +69,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       completedTasks,
       completeTask,
       resetProgress,
-      userName: "김현대"
+      userName: initialUserName || "김현대"
     }}>
       {children}
     </ProgressContext.Provider>
