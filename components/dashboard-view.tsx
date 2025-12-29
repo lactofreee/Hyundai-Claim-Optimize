@@ -12,7 +12,7 @@ import { useState } from "react"
 
 export function DashboardView() {
   const router = useRouter()
-  const { currentStep, resetProgress, completedTasks } = useProgress()
+  const { currentStep, resetProgress, completedTasks, completeTask } = useProgress()
   const [isCallDrawerOpen, setIsCallDrawerOpen] = useState(false)
   return (
     <div className="space-y-4 pb-20 md:pb-0">
@@ -135,6 +135,37 @@ export function DashboardView() {
               </div>
               <div className="flex gap-1 opacity-20">
                 <div className="w-6 h-6 bg-slate-400 rounded-md" />
+              </div>
+            </div>
+          )}
+
+          {completedTasks.includes("photo-upload") && !completedTasks.includes("docs-guide") && (
+            <div
+              className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
+              onClick={() => completeTask("docs-guide")}
+            >
+              <div>
+                <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구 제출서류 안내</p>
+                <p className="text-sm text-slate-500 font-medium">AI 안내 확인 {'>'}</p>
+              </div>
+              <div className="flex gap-1 opacity-20">
+                <div className="w-6 h-6 bg-slate-400 rounded-md" />
+                <div className="w-6 h-6 bg-slate-400 rounded-full" />
+              </div>
+            </div>
+          )}
+
+          {completedTasks.includes("docs-guide") && !completedTasks.includes("med-guarantee") && (
+            <div
+              className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
+              onClick={() => completeTask("med-guarantee")}
+            >
+              <div>
+                <p className="font-bold text-lg text-slate-900 mb-1">진료비 지급보증서 요청하기</p>
+                <p className="text-sm text-slate-500 font-medium">발급 요청 {'>'}</p>
+              </div>
+              <div className="flex gap-1 opacity-20">
+                <div className="w-6 h-6 bg-slate-400 rounded-full" />
               </div>
             </div>
           )}

@@ -123,7 +123,9 @@ export function ChatbotView() {
                   <span className="text-foreground font-semibold">
                     {!completedTasks.includes("claim-write") ? "보험금 청구서 작성이 가장 시급합니다" :
                       !completedTasks.includes("photo-upload") ? "사고 현장 사진 등록이 필요합니다" :
-                        "담당자 배정을 기다리고 있습니다"}
+                        !completedTasks.includes("docs-guide") ? "보험금 청구 서류 안내가 필요합니다" :
+                          !completedTasks.includes("med-guarantee") ? "진료비 지급보증서 요청이 필요합니다" :
+                            "담당자 배정을 기다리고 있습니다"}
                   </span>
                 </div>
               </div>
@@ -151,6 +153,37 @@ export function ChatbotView() {
                 </div>
                 <div className="flex gap-1 opacity-20">
                   <div className="w-6 h-6 bg-slate-400 rounded-md" />
+                </div>
+              </div>
+            )}
+
+            {completedTasks.includes("photo-upload") && !completedTasks.includes("docs-guide") && (
+              <div
+                className="w-full bg-zinc-100 rounded-2xl p-5 mb-8 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors"
+                onClick={() => { completeTask("docs-guide"); handleSendMessage("필요 서류 안내해주세요") }}
+              >
+                <div>
+                  <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구 제출서류 안내</p>
+                  <p className="text-sm text-slate-500 font-medium">AI 안내 받기 {'>'}</p>
+                </div>
+                <div className="flex gap-1 opacity-20">
+                  <div className="w-6 h-6 bg-slate-400 rounded-md" />
+                  <div className="w-6 h-6 bg-slate-400 rounded-full" />
+                </div>
+              </div>
+            )}
+
+            {completedTasks.includes("docs-guide") && !completedTasks.includes("med-guarantee") && (
+              <div
+                className="w-full bg-zinc-100 rounded-2xl p-5 mb-8 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors"
+                onClick={() => { completeTask("med-guarantee"); handleSendMessage("지급 보증서 발급 요청") }}
+              >
+                <div>
+                  <p className="font-bold text-lg text-slate-900 mb-1">진료비 지급보증서 요청하기</p>
+                  <p className="text-sm text-slate-500 font-medium">발급 요청 {'>'}</p>
+                </div>
+                <div className="flex gap-1 opacity-20">
+                  <div className="w-6 h-6 bg-slate-400 rounded-full" />
                 </div>
               </div>
             )}

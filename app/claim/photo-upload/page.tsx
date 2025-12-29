@@ -90,23 +90,30 @@ export default function PhotoUploadPage() {
         {files.length > 0 && (
           <div className="grid grid-cols-3 gap-3">
             {files.map((file, index) => (
-              <div key={index} className="relative aspect-square bg-black/5 rounded-xl overflow-hidden border border-stone-200">
-                {/* Simplified preview logic - ideally would use URL.createObjectURL */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {file.type.startsWith('video') ? (
-                    <Video className="w-8 h-8 text-slate-400" />
-                  ) : (
-                    <ImageIcon className="w-8 h-8 text-slate-400" />
-                  )}
+              <div key={index} className="relative aspect-square bg-black/5 rounded-xl overflow-hidden border border-stone-200 group">
+                {file.type.startsWith('image/') ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`preview-${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-stone-100">
+                    <Video className="w-8 h-8 text-stone-400" />
+                  </div>
+                )}
+
+                {/* Overlay Gradient for readability of name */}
+                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/60 to-transparent p-2 pt-6">
+                  <p className="text-[10px] text-white truncate text-center px-1 font-medium">{file.name}</p>
                 </div>
-                <div className="absolute bottom-0 w-full bg-black/50 p-1">
-                  <p className="text-[10px] text-white truncate text-center px-1">{file.name}</p>
-                </div>
+
                 <button
                   onClick={(e) => { e.stopPropagation(); removeFile(index); }}
-                  className="absolute top-1 right-1 w-6 h-6 bg-black/50 hover:bg-red-500 rounded-full flex items-center justify-center text-white transition-colors"
+                  className="absolute top-1 right-1 w-6 h-6 bg-black/50 hover:bg-red-500 rounded-full flex items-center justify-center text-white transition-colors backdrop-blur-sm"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}
