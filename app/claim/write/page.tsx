@@ -12,9 +12,11 @@ import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
+import { useProgress } from "@/components/progress-provider"
 
 export default function ClaimWritePage() {
   const router = useRouter()
+  const { completeTask } = useProgress()
   const [step, setStep] = useState(1)
 
   // Form State
@@ -43,6 +45,9 @@ export default function ClaimWritePage() {
   }
 
   const handleNext = () => {
+    if (step === 3) {
+      completeTask("claim-write")
+    }
     setStep(prev => prev + 1)
     window.scrollTo(0, 0)
   }

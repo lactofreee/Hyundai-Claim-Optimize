@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Search, Bot, Send, User, ChevronRight } from "lucide-react"
+import { Search, Bot, Send, User, ChevronRight, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useProgress, TaskId } from "@/components/progress-provider"
 
 interface Message {
   id: string
@@ -16,6 +17,7 @@ interface Message {
 
 export function ChatbotView() {
   const router = useRouter()
+  const { completedTasks, completeTask, userName } = useProgress()
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -108,7 +110,7 @@ export function ChatbotView() {
               </div>
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tight text-foreground leading-tight">
-                  ㅇㅇ님<br />
+                  {userName}님<br />
                   인증 감사합니다.
                 </h2>
                 <div className="pt-2 text-muted-foreground text-base leading-relaxed whitespace-pre-line">
@@ -118,23 +120,41 @@ export function ChatbotView() {
                   <br />
                   지금은 치료를 위한
                   <br />
-                  <span className="text-foreground font-semibold">보험금 청구서 작성이 가장 시급합니다</span>
+                  <span className="text-foreground font-semibold">
+                    {!completedTasks.includes("claim-write") ? "보험금 청구서 작성이 가장 시급합니다" :
+                      !completedTasks.includes("photo-upload") ? "사고 현장 사진 등록이 필요합니다" :
+                        "담당자 배정을 기다리고 있습니다"}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Urgent Action Card */}
-            <div className="w-full bg-zinc-100 rounded-2xl p-5 mb-8 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors" onClick={() => router.push("/claim/write")}>
-              <div>
-                <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구서 작성 하기</p>
-                <p className="text-sm text-slate-500 font-medium">바로가기 {'>'}</p>
+            {/* Dynamic Urgent Action Card */}
+            {!completedTasks.includes("claim-write") && (
+              <div className="w-full bg-zinc-100 rounded-2xl p-5 mb-8 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors" onClick={() => router.push("/claim/write")}>
+                <div>
+                  <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구서 작성 하기</p>
+                  <p className="text-sm text-slate-500 font-medium">바로가기 {'>'}</p>
+                </div>
+                <div className="flex gap-1 opacity-20">
+                  <div className="w-6 h-6 bg-slate-400 rounded-full" />
+                  <div className="w-6 h-6 bg-slate-400 rounded-md" />
+                </div>
               </div>
-              <div className="flex gap-1 opacity-20">
-                {/* Decorative Shapes mimicking the image */}
-                <div className="w-6 h-6 bg-slate-400 rounded-full" />
-                <div className="w-6 h-6 bg-slate-400 rounded-md" />
+            )}
+
+            {completedTasks.includes("claim-write") && !completedTasks.includes("photo-upload") && (
+              <div className="w-full bg-zinc-100 rounded-2xl p-5 mb-8 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors" onClick={() => router.push("/claim/photo-upload")}>
+                <div>
+                  <p className="font-bold text-lg text-slate-900 mb-1">사고 사진 등록하기</p>
+                  <p className="text-sm text-slate-500 font-medium">사진 업로드 {'>'}</p>
+                </div>
+                <div className="flex gap-1 opacity-20">
+                  <div className="w-6 h-6 bg-slate-400 rounded-md" />
+                </div>
               </div>
-            </div>
+            )}
+
 
             {/* Next Steps List */}
             <div className="w-full border border-zinc-200 rounded-2xl p-5 space-y-5 bg-white">
@@ -142,22 +162,32 @@ export function ChatbotView() {
 
               <div className="space-y-4">
                 {[
-                  "사고 사진 등록하기",
-                  "보험금 청구 제출 서류 안내",
-                  "진료비 지급보증서 요청하기"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between group cursor-pointer" onClick={() => handleSendMessage(item)}>
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full border-2 border-slate-800 flex items-center justify-center">
-                        <span className="text-slate-800 text-xs font-bold leading-none">✓</span>
+                  { id: "claim-write", label: "보험금 청구서 작성 하기", action: () => router.push("/claim/write") },
+                  { id: "photo-upload", label: "사고 사진 등록하기", action: () => router.push("/claim/photo-upload") },
+                  { id: "docs-guide", label: "보험금 청구 제출 서류 안내", action: () => { completeTask("docs-guide"); handleSendMessage("필요 서류 안내해주세요") } },
+                  { id: "med-guarantee", label: "진료비 지급보증서 요청하기", action: () => { completeTask("med-guarantee"); handleSendMessage("지급 보증서 발급 요청") } }
+                ].map((item) => {
+                  const isDone = completedTasks.includes(item.id as TaskId)
+                  return (
+                    <div key={item.id} className="flex items-center justify-between group cursor-pointer" onClick={() => !isDone && item.action()}>
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
+                          isDone ? "bg-slate-800 border-slate-800" : "border-slate-300"
+                        )}>
+                          {isDone ? <Check className="w-3.5 h-3.5 text-white" /> : <span className="text-slate-300 text-xs font-bold leading-none"></span>}
+                        </div>
+                        <span className={cn(
+                          "text-base font-bold transition-colors",
+                          isDone ? "text-slate-400 line-through decoration-slate-400" : "text-slate-800"
+                        )}>{item.label}</span>
                       </div>
-                      <span className="text-base font-bold text-slate-800">{item}</span>
+                      <div className={cn("text-slate-400 transition-colors", !isDone && "group-hover:text-slate-900")}>
+                        {isDone ? null : <ChevronRight className="w-5 h-5" />}
+                      </div>
                     </div>
-                    <div className="text-slate-400 group-hover:text-slate-900 transition-colors">
-                      <ChevronRight className="w-5 h-5" />
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>

@@ -2,11 +2,18 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ChevronRight, FileText, Upload } from "lucide-react"
+import { ChevronRight, FileText, Upload, RotateCcw, Phone, User, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useProgress } from "@/components/progress-provider"
+import { useState } from "react"
 
 export function DashboardView() {
+  const router = useRouter()
+  const { currentStep, resetProgress, completedTasks } = useProgress()
+  const [isCallDrawerOpen, setIsCallDrawerOpen] = useState(false)
   return (
     <div className="space-y-4 pb-20 md:pb-0">
       {/* 접수 정보 카드 */}
@@ -30,14 +37,21 @@ export function DashboardView() {
           <div className="space-y-4">
             <h3 className="font-bold text-lg">담당자 정보</h3>
             <div className="flex items-start gap-4">
-              <Avatar className="w-14 h-14 border">
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback className="bg-purple-100 text-purple-600">김</AvatarFallback>
+              <Avatar className="w-14 h-14 border bg-zinc-50">
+                <AvatarFallback className="bg-zinc-100 text-zinc-500">
+                  <User className="w-8 h-8" />
+                </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
-                <p className="font-medium text-lg">이름</p>
-                <p className="text-muted-foreground">연락처 <span className="text-foreground ml-2">010 1234 5678</span></p>
-                <p className="text-muted-foreground text-sm">소개 문구</p>
+                <p className="font-medium text-lg">김현대 매니저</p>
+                <div
+                  className="flex items-center gap-1 text-blue-600 cursor-pointer hover:underline"
+                  onClick={() => setIsCallDrawerOpen(true)}
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span className="font-medium">010-1234-5678</span>
+                </div>
+                <p className="text-muted-foreground text-sm">고객님의 빠른 일상 복귀를 돕겠습니다.</p>
               </div>
             </div>
           </div>
@@ -45,36 +59,46 @@ export function DashboardView() {
           {/* 사고 처리 단계 섹션 (Custom Blue Stepper) */}
           <div className="space-y-4 pt-1">
             <div className="flex justify-between items-end mb-2">
-              <h3 className="font-medium text-foreground/80">사고 처리 단계</h3>
-              <span className="text-sm font-bold text-blue-600">접수 (1/5)</span>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-lg">사고 처리 단계</h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 hover:bg-slate-100 rounded-full text-slate-400"
+                  onClick={resetProgress}
+                  title="개발용: 진행상태 초기화"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                </Button>
+              </div>
+              <span className="text-sm font-bold text-blue-600">{['접수', '피해', '치료', '보험금 지급', '치료비 지급'][currentStep]} ({currentStep + 1}/5)</span>
             </div>
 
             <div className="relative px-2">
               {/* Background Line */}
               <div className="absolute top-[9px] left-0 w-full h-[2px] bg-slate-100" />
-              {/* Active Progress Line (Empty for Step 1 start) */}
-              <div className="absolute top-[9px] left-0 h-[2px] bg-blue-500 transition-all duration-300" style={{ width: '0%' }} />
+              {/* Active Progress Line */}
+              <div className="absolute top-[9px] left-0 h-[2px] bg-blue-500 transition-all duration-300" style={{ width: `${(currentStep / 4) * 100}%` }} />
 
               {/* Nodes */}
               <div className="relative flex justify-between">
                 {['접수', '피해', '치료', '보험금\n지급', '치료비\n지급'].map((label, i) => {
-                  const currentStep = 0; // 0-indexed (접수)
-                  const isCompleted = i < currentStep;
+                  const isCompleted = i <= currentStep;
                   const isCurrent = i === currentStep;
 
                   return (
                     <div key={i} className="flex flex-col items-center gap-2">
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center bg-white z-10 transition-all box-border",
-                        (isCompleted || isCurrent) ? "border-blue-500" : "border-slate-200"
+                        isCompleted ? "border-blue-500" : "border-slate-200"
                       )}>
-                        {(isCompleted || isCurrent) && (
+                        {isCompleted && (
                           <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                         )}
                       </div>
                       <span className={cn(
                         "text-[11px] font-medium text-center whitespace-pre-line leading-tight",
-                        (isCompleted || isCurrent) ? "text-blue-600 font-bold" : "text-slate-400"
+                        isCompleted ? "text-blue-600 font-bold" : "text-slate-400"
                       )}>{label}</span>
                     </div>
                   )
@@ -82,6 +106,38 @@ export function DashboardView() {
               </div>
             </div>
           </div>
+
+          {/* Dynamic Urgent Action Card (Mirrored from Chatbot) */}
+          {!completedTasks.includes("claim-write") && (
+            <div
+              className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
+              onClick={() => router.push("/claim/write")}
+            >
+              <div>
+                <p className="font-bold text-lg text-slate-900 mb-1">보험금 청구서 작성 하기</p>
+                <p className="text-sm text-slate-500 font-medium">바로가기 {'>'}</p>
+              </div>
+              <div className="flex gap-1 opacity-20">
+                <div className="w-6 h-6 bg-slate-400 rounded-full" />
+                <div className="w-6 h-6 bg-slate-400 rounded-md" />
+              </div>
+            </div>
+          )}
+
+          {completedTasks.includes("claim-write") && !completedTasks.includes("photo-upload") && (
+            <div
+              className="w-full bg-zinc-100 rounded-2xl p-5 flex items-center justify-between cursor-pointer hover:bg-zinc-200 transition-colors mt-6"
+              onClick={() => router.push("/claim/photo-upload")}
+            >
+              <div>
+                <p className="font-bold text-lg text-slate-900 mb-1">사고 사진 등록하기</p>
+                <p className="text-sm text-slate-500 font-medium">사진 업로드 {'>'}</p>
+              </div>
+              <div className="flex gap-1 opacity-20">
+                <div className="w-6 h-6 bg-slate-400 rounded-md" />
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -100,6 +156,50 @@ export function DashboardView() {
           description="사고사진등록, 피해사항등록, 진단서등록, 진료비 지급 보증 요청 등"
         />
       </div>
+
+      {/* Phone Call Drawer Overlay */}
+      {isCallDrawerOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 z-50 transition-opacity"
+            onClick={() => setIsCallDrawerOpen(false)}
+          />
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl p-6 pb-10 space-y-6 animate-in slide-in-from-bottom duration-300 md:max-w-md md:mx-auto md:bottom-10 md:rounded-3xl cursor-default">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-xl">담당자에게 전화 걸기</h3>
+              <Button variant="ghost" size="icon" onClick={() => setIsCallDrawerOpen(false)}>
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-center p-8 bg-zinc-50 rounded-full w-24 h-24 mx-auto mb-4">
+                <Phone className="w-10 h-10 text-blue-600" />
+              </div>
+              <div className="text-center space-y-1">
+                <p className="text-2xl font-bold">010-1234-5678</p>
+                <p className="text-muted-foreground">김현대 매니저</p>
+              </div>
+            </div>
+
+            <div className="grid gap-3">
+              <a href="tel:01012345678" className="w-full">
+                <Button className="w-full h-14 text-lg bg-green-500 hover:bg-green-600 rounded-xl gap-2">
+                  <Phone className="w-5 h-5" />
+                  통화하기
+                </Button>
+              </a>
+              <Button
+                variant="outline"
+                className="w-full h-14 text-lg rounded-xl border-zinc-200"
+                onClick={() => setIsCallDrawerOpen(false)}
+              >
+                취소
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
