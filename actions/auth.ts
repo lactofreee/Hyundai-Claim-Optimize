@@ -10,10 +10,15 @@ import { createClient } from "@/lib/supabase/server";
 export async function loginAction(authData: { name: string, phone: string, ci: string }) {
   const cookieStore = await cookies();
   const session = await getIronSession<UserSession>(cookieStore, sessionOptions);
+  
+  // Clear any existing session to prevent cross-user data contamination
+  session.destroy();
+  
   const supabase = createClient(cookieStore);
 
   // 1. Check if user exists in Supabase
   let userId = "";
+  console.log(`[Login] Attempting login for: ${authData.phone}`);
   
   const { data: existingUser, error: fetchError } = await supabase
     .from("users")

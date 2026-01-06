@@ -21,6 +21,7 @@ export default function ClaimWritePage() {
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
 
   // Form State
   const [formData, setFormData] = useState({
@@ -52,6 +53,14 @@ export default function ClaimWritePage() {
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+    // Clear error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => {
+        const next = { ...prev }
+        delete next[field]
+        return next
+      })
+    }
   }
 
   const handleNext = async () => {
@@ -67,7 +76,17 @@ export default function ClaimWritePage() {
           completeTask("claim-write")
           setStep(4)
         } else {
-          setSubmitError(result.message || "입력 정보를 다시 확인해주세요.");
+          if (result.errors) {
+            setFieldErrors(result.errors)
+            // Show the first error as a summary
+            const firstError = Object.values(result.errors)[0]?.[0]
+            setSubmitError(firstError || "입력 정보를 다시 확인해 주세요.")
+
+            // If there are errors in previous steps, alert the user
+            console.log("Validation errors:", result.errors)
+          } else {
+            setSubmitError(result.message || "입력 정보를 다시 확인해 주세요.");
+          }
         }
       } catch (err) {
         setSubmitError("서버와의 통신 중 오류가 발생했습니다.");
@@ -102,27 +121,32 @@ export default function ClaimWritePage() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b border-stone-100 px-4 h-14 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-2">
-          {step > 1 && step < 4 ? (
-            <Button variant="ghost" size="icon" className="-ml-2 hover:bg-stone-100 rounded-full" onClick={handlePrev}>
-              <ChevronLeft className="w-6 h-6 text-slate-600" />
-            </Button>
-          ) : (
-            <Link href="/">
-              <Button variant="ghost" size="icon" className="-ml-2 hover:bg-stone-100 rounded-full">
+          {step < 4 ? (
+            step > 1 ? (
+              <Button variant="ghost" size="icon" className="-ml-2 bg-transparent hover:bg-transparent shadow-none" onClick={handlePrev}>
                 <ChevronLeft className="w-6 h-6 text-slate-600" />
               </Button>
-            </Link>
-          )}
-          <h1 className="font-bold text-lg tracking-tight">보험금 청구</h1>
+            ) : (
+              <Link href="/">
+                <Button variant="ghost" size="icon" className="-ml-2 bg-transparent hover:bg-transparent shadow-none">
+                  <ChevronLeft className="w-6 h-6 text-slate-600" />
+                </Button>
+              </Link>
+            )
+          ) : null}
+          <h1 className="font-bold text-lg tracking-tight">{step === 4 ? "청구 완료" : "보험금 청구"}</h1>
         </div>
         <div className="text-sm font-bold text-[#635BFF]">
           {step < 4 && `${step} / 3`}
         </div>
       </header>
 
-      <ProgressBar />
+      {step < 4 && <ProgressBar />}
 
-      <main className="flex-1 p-6 max-w-xl mx-auto w-full space-y-8 pt-8">
+      <main className={cn(
+        "flex-1 p-6 max-w-xl mx-auto w-full",
+        step === 4 ? "flex flex-col justify-center pt-0" : "space-y-8 pt-8"
+      )}>
 
         {/* Step 1: Personal Info */}
         {step === 1 && (
@@ -175,6 +199,8 @@ export default function ClaimWritePage() {
                     </div>
                   </div>
                 </div>
+                {fieldErrors.rrnFront && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.rrnFront[0]}</p>}
+                {fieldErrors.rrnBack && !fieldErrors.rrnFront && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.rrnBack[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -186,6 +212,7 @@ export default function ClaimWritePage() {
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
                   placeholder="예) 서울시 강남구 테헤란로 123"
                 />
+                {fieldErrors.address && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.address[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -197,6 +224,7 @@ export default function ClaimWritePage() {
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
                   placeholder="직장명을 입력해 주세요"
                 />
+                {fieldErrors.job && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.job[0]}</p>}
               </div>
             </div>
           </div>
@@ -233,6 +261,7 @@ export default function ClaimWritePage() {
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
                   placeholder="예) 강남역 사거리"
                 />
+                {fieldErrors.accidentLocation && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.accidentLocation[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -247,6 +276,7 @@ export default function ClaimWritePage() {
                     <SelectItem value="solo">단독사고</SelectItem>
                   </SelectContent>
                 </Select>
+                {fieldErrors.accidentType && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.accidentType[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -258,6 +288,7 @@ export default function ClaimWritePage() {
                   className="min-h-[140px] rounded-xl text-base resize-none bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF] p-4 leading-relaxed"
                   placeholder="사고 상황을 구체적으로 설명해 주세요."
                 />
+                {fieldErrors.accidentDesc && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.accidentDesc[0]}</p>}
               </div>
             </div>
           </div>
@@ -289,6 +320,7 @@ export default function ClaimWritePage() {
                     <SelectItem value="etc">기타</SelectItem>
                   </SelectContent>
                 </Select>
+                {fieldErrors.injuryPart && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.injuryPart[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -300,6 +332,7 @@ export default function ClaimWritePage() {
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
                   placeholder="병원 이름 입력"
                 />
+                {fieldErrors.hospitalName && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.hospitalName[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -311,6 +344,7 @@ export default function ClaimWritePage() {
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
                   placeholder="예) 서울 강남구"
                 />
+                {fieldErrors.hospitalLocation && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.hospitalLocation[0]}</p>}
               </div>
 
               <div className="space-y-3">
@@ -340,6 +374,7 @@ export default function ClaimWritePage() {
                   onChange={(e) => handleChange("firstVisitDate", e.target.value)}
                   className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF] block w-full"
                 />
+                {fieldErrors.firstVisitDate && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.firstVisitDate[0]}</p>}
               </div>
             </div>
           </div>
@@ -347,64 +382,83 @@ export default function ClaimWritePage() {
 
         {/* Step 4: Completion */}
         {step === 4 && (
-          <div className="flex flex-col items-center justify-center py-20 animate-in zoom-in-50 duration-500 text-center space-y-6">
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <CheckCircle2 className="w-12 h-12 text-green-600" />
+          <div className="flex flex-col items-center justify-center py-4 text-center">
+            {/* Icon Section with smooth fade and pop */}
+            <div className="relative mb-6 animate-in fade-in zoom-in-75 duration-700 ease-out">
+              <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-10 h-10 text-success" />
+              </div>
+              <div className="absolute inset-0 bg-success/20 rounded-full animate-ping duration-1000 opacity-20" />
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900">피해사항 등록이<br />완료되었습니다!</h2>
-              <p className="text-slate-500">
-                담당자가 확인 후 신속하게<br />다음 절차를 안내해 드리겠습니다.
+
+            {/* Title Section with staggered slide-up */}
+            <div className="space-y-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 fill-mode-both">
+              <h2 className="text-2xl font-black tracking-tight text-slate-900 leading-tight">
+                접수가 완료되었습니다
+              </h2>
+              <p className="text-slate-500 text-sm font-medium leading-relaxed">
+                신속하게 검토 후 연락드리겠습니다.
               </p>
             </div>
 
-            <Card className="w-full bg-white border-stone-200 shadow-md mt-8">
-              <CardContent className="p-6 space-y-3 text-sm text-left">
-                <div className="flex justify-between items-center py-1 border-b border-stone-100">
-                  <span className="text-slate-500">접수 번호</span>
-                  <span className="font-bold text-slate-900 text-lg">{caseNumber}</span>
+            {/* Details Card with subtle appearance */}
+            <div className="w-full mt-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
+              <Card className="border-none bg-white shadow-sm overflow-hidden rounded-3xl">
+                <div className="bg-stone-50/50 px-6 py-3 border-b border-stone-100">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">청구 상세 정보</p>
                 </div>
-                <div className="flex justify-between items-center py-1 border-b border-stone-100">
-                  <span className="text-slate-500">이름</span>
-                  <span className="font-bold text-slate-900">{formData.name}</span>
-                </div>
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-slate-500">병원</span>
-                  <span className="font-bold text-slate-900">{formData.hospitalName || "-"}</span>
-                </div>
-              </CardContent>
-            </Card>
+                <CardContent className="p-5 space-y-3">
+                  <div className="flex justify-between items-center py-0.5">
+                    <span className="text-slate-500 text-sm font-medium">접수 번호</span>
+                    <span className="font-bold text-slate-900 tabular-nums">{caseNumber}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-0.5 border-t border-stone-50 pt-3">
+                    <span className="text-slate-500 text-sm font-medium">청구인</span>
+                    <span className="font-bold text-slate-900">{formData.name}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-0.5 border-t border-stone-50 pt-3">
+                    <span className="text-slate-500 text-sm font-medium">의료기관</span>
+                    <span className="font-bold text-slate-900 truncate max-w-[150px]">{formData.hospitalName || "정보 없음"}</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="mt-4 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50">
+                <p className="text-[11px] text-indigo-600 font-bold leading-normal">
+                  💡 사고 사진을 등록하시면 보상 처리가 빨라집니다.
+                </p>
+              </div>
+
+              {/* Action Button moved inside for step 4 balance */}
+              <Button
+                className="w-full h-14 text-lg font-bold rounded-2xl bg-slate-900 hover:bg-slate-800 shadow-xl mt-12 mb-8"
+                onClick={() => router.push("/")}
+              >
+                메인으로 돌아가기
+              </Button>
+            </div>
           </div>
         )}
 
       </main>
 
-      {/* Bottom CTA (Navigation) */}
-      <div className="sticky bottom-0 bg-white/80 backdrop-blur-md border-t border-stone-200 p-4 safe-area-bottom">
-        {step < 4 ? (
-          <>
-            <Button
-              className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-xl shadow-indigo-200"
-              onClick={handleNext}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "제출 중..." : (step === 3 ? "제출하기" : "다음")}
-            </Button>
-            {submitError && (
-              <p className="text-red-500 text-sm mt-2 text-center font-medium animate-in fade-in slide-in-from-top-1">
-                {submitError}
-              </p>
-            )}
-          </>
-        ) : (
+      {/* Bottom CTA (Navigation) - Only for steps 1-3 */}
+      {step < 4 && (
+        <div className="sticky bottom-0 bg-white/80 backdrop-blur-md border-t border-stone-200 p-4 safe-area-bottom">
           <Button
-            className="w-full h-14 text-lg font-bold rounded-xl bg-slate-900 hover:bg-slate-800 shadow-xl"
-            onClick={() => router.push("/")}
+            className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-xl shadow-indigo-200"
+            onClick={handleNext}
+            disabled={isSubmitting}
           >
-            메인으로 돌아가기
+            {isSubmitting ? "제출 중..." : (step === 3 ? "제출하기" : "다음")}
           </Button>
-        )}
-      </div>
+          {submitError && (
+            <p className="text-red-500 text-sm mt-2 text-center font-medium animate-in fade-in slide-in-from-top-1">
+              {submitError}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

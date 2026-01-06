@@ -46,13 +46,13 @@ export default function Home() {
               <TabsList className="w-full h-12 bg-transparent p-0 flex">
                 <TabsTrigger
                   value="dashboard"
-                  className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:font-bold data-[state=active]:text-black text-gray-400 hover:text-gray-600 bg-transparent shadow-none"
+                  className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-primary text-gray-400 hover:text-gray-600 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   사고 처리 현황
                 </TabsTrigger>
                 <TabsTrigger
                   value="ai-assistant"
-                  className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:font-bold data-[state=active]:text-black text-gray-400 hover:text-gray-600 bg-transparent shadow-none"
+                  className="flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-primary text-gray-400 hover:text-gray-600 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
                   AI 비서
                 </TabsTrigger>

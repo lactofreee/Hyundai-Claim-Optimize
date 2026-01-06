@@ -18,8 +18,10 @@ export function ChatGuide({ onActionClick }: { onActionClick?: () => void }) {
     <div className="h-full flex flex-col justify-start px-1 py-2 overflow-y-auto w-full">
       {/* Greeting Section */}
       <div className="space-y-6 mb-8">
-        <div className="w-14 h-14 bg-[#5B5B8A] rounded-2xl flex items-center justify-center shadow-sm">
-          <Bot className="w-7 h-7 text-white" />
+        <div className="mb-8 flex justify-start">
+          <div className="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
+            <Bot className="w-7 h-7 text-white" />
+          </div>
         </div>
         <div className="space-y-2">
           {(() => {
@@ -116,34 +118,66 @@ export function ChatGuide({ onActionClick }: { onActionClick?: () => void }) {
       <div className="w-full border border-zinc-200 rounded-2xl p-5 space-y-5 bg-white">
         <h3 className="font-bold text-lg">다음 단계를 완료해 주세요</h3>
 
-        <div className="space-y-4">
-          {[
-            { id: "claim-write", label: "보험금 청구서 작성 하기", action: () => handleAction("/claim/write") },
-            { id: "photo-upload", label: "사고 사진 등록하기", action: () => handleAction("/claim/photo-upload") },
-            { id: "docs-guide", label: "보험금 청구 제출 서류 안내", action: () => handleAction("/claim/docs-guide") },
-            { id: "med-guarantee", label: "진료비 지급보증서 요청하기", action: () => handleAction("/claim/med-guarantee") }
-          ].map((item) => {
-            const isDone = completedTasks.includes(item.id as TaskId)
-            return (
-              <div key={item.id} className="flex items-center justify-between group cursor-pointer" onClick={() => !isDone && item.action()}>
-                <div className="flex items-center gap-3">
+        <div className="relative space-y-0">
+          {(() => {
+            // Determine which task is currently highlighted at the top
+            let activeTask = "";
+            if (!completedTasks.includes("claim-write")) activeTask = "claim-write";
+            else if (!completedTasks.includes("photo-upload")) activeTask = "photo-upload";
+            else if (!completedTasks.includes("docs-guide")) activeTask = "docs-guide";
+            else if (!completedTasks.includes("med-guarantee")) activeTask = "med-guarantee";
+
+            const allSteps = [
+              { id: "claim-write", label: "보험금 청구서 작성 하기", action: () => handleAction("/claim/write") },
+              { id: "photo-upload", label: "사고 사진 등록하기", action: () => handleAction("/claim/photo-upload") },
+              { id: "docs-guide", label: "보험금 청구 제출 서류 안내", action: () => handleAction("/claim/docs-guide") },
+              { id: "med-guarantee", label: "진료비 지급보증서 요청하기", action: () => handleAction("/claim/med-guarantee") }
+            ];
+
+            const filteredSteps = allSteps.filter(item => item.id !== activeTask);
+
+            return filteredSteps.map((item, index) => {
+              const isDone = completedTasks.includes(item.id as TaskId);
+              const isLast = index === filteredSteps.length - 1;
+
+              return (
+                <div key={item.id} className="relative flex items-start gap-4 pb-6 last:pb-0 group cursor-pointer" onClick={() => !isDone && item.action()}>
+                  {/* Vertical Progress Line */}
+                  {!isLast && (
+                    <div className={cn(
+                      "absolute left-[11px] top-[24px] w-[0.5px] bg-zinc-100",
+                      isDone && "bg-slate-800"
+                    )} style={{ height: 'calc(100% - 16px)' }} />
+                  )}
+
+                  {/* Status Indicator (Dot) */}
                   <div className={cn(
-                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                    isDone ? "bg-slate-800 border-slate-800" : "border-slate-300"
+                    "relative z-10 w-6 h-6 rounded-full border flex items-center justify-center transition-colors bg-white",
+                    isDone ? "border-slate-800 bg-slate-800" : "border-slate-200"
                   )}>
-                    {isDone ? <Check className="w-3.5 h-3.5 text-white" /> : <span className="text-slate-300 text-xs font-bold leading-none"></span>}
+                    {isDone ? (
+                      <Check className="w-3 h-3 text-white" />
+                    ) : (
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                    )}
                   </div>
-                  <span className={cn(
-                    "text-base font-bold transition-colors",
-                    isDone ? "text-slate-400 line-through decoration-slate-400" : "text-slate-800"
-                  )}>{item.label}</span>
+
+                  {/* Label Content */}
+                  <div className="flex-1 flex items-center justify-between pt-0.5">
+                    <span className={cn(
+                      "text-base transition-colors",
+                      isDone ? "text-slate-400 font-medium" : "text-slate-800 font-bold"
+                    )}>
+                      {item.label}
+                    </span>
+                    {!isDone && (
+                      <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-slate-900 transition-colors" />
+                    )}
+                  </div>
                 </div>
-                <div className={cn("text-slate-400 transition-colors", !isDone && "group-hover:text-slate-900")}>
-                  {isDone ? null : <ChevronRight className="w-5 h-5" />}
-                </div>
-              </div>
-            )
-          })}
+              );
+            });
+          })()}
         </div>
       </div>
     </div>

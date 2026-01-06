@@ -84,7 +84,9 @@ export function ChatbotView() {
       })
 
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        const errorData = await response.json().catch(() => ({}))
+        const errorMessage = errorData.error || errorData.message || '서버 응답 오류가 발생했습니다.'
+        throw new Error(errorMessage)
       }
 
       const data = await response.json()
@@ -97,12 +99,12 @@ export function ChatbotView() {
         content: aiContent,
       }
       setMessages((prev) => [...prev, aiMessage])
-    } catch (error) {
+    } catch (error: any) {
       console.error("Webhook error:", error)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "죄송합니다. 서버 통신 중 오류가 발생했습니다.",
+        content: error.message || "죄송합니다. 서버 통신 중 오류가 발생했습니다.",
       }
       setMessages((prev) => [...prev, errorMessage])
     } finally {

@@ -14,8 +14,11 @@ export interface ChatMessage {
 export async function getChatHistoryAction(): Promise<ChatMessage[]> {
   const session = await getSession();
   if (!session.isLoggedIn || !session.userId) {
+    console.log("[ChatHistory] Unauthorized access attempt or no session");
     return [];
   }
+
+  console.log(`[ChatHistory] Fetching history for userId: ${session.userId}`);
 
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);

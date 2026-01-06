@@ -117,7 +117,7 @@ export default function PhotoUploadPage() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/">
-            <Button variant="ghost" size="icon" className="-ml-2 hover:bg-stone-100 rounded-full" disabled={isUploading}>
+            <Button variant="ghost" size="icon" className="-ml-2 bg-transparent hover:bg-transparent shadow-none" disabled={isUploading}>
               <ChevronLeft className="w-6 h-6 text-slate-600" />
             </Button>
           </Link>
