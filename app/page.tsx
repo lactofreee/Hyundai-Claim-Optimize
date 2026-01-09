@@ -2,8 +2,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Menu } from "lucide-react"
 import { DashboardView } from "@/components/dashboard-view"
 import { ChatbotView } from "@/components/chatbot-view"
+import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
+import { getSession } from "@/lib/session"
+import { createClient } from "@/lib/supabase/server"
 
-export default function Home() {
+export default async function Home() {
+  // 1. Check claim existence
+  const session = await getSession();
+  const supabase = createClient(await cookies());
+
+  if (session?.userId) {
+    const { data: hasClaim } = await supabase
+      .from("insurance_claims")
+      .select("id")
+      .eq("user_id", session.userId)
+      .limit(1)
+      .maybeSingle();
+
+    if (!hasClaim) {
+      console.log(`[Home] User ${session.userId} has no claims. Redirecting to /claim/write`);
+      redirect("/claim/write");
+    }
+  }
+
   return (
     <main className="h-[100dvh] bg-stone-100 flex flex-col font-sans text-slate-900 overflow-hidden md:h-screen">
 

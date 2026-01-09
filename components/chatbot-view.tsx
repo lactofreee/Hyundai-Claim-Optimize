@@ -160,7 +160,7 @@ export function ChatbotView() {
           <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
           <h3 className="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
             <MessageSquare className="w-4 h-4 text-indigo-500" />
-            AI 보험 매니저
+            AI 보험 전문가
           </h3>
         </div>
       </div>

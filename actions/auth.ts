@@ -74,7 +74,20 @@ export async function loginAction(authData: { name: string, phone: string, ci: s
 
   await session.save();
   
-  redirect("/");
+  // 4. Redirect based on claim existence
+  const { data: hasClaim } = await supabase
+    .from("insurance_claims")
+    .select("id")
+    .eq("user_id", userId)
+    .limit(1)
+    .maybeSingle();
+
+  if (!hasClaim) {
+    console.log(`[Auth] New user or no claim history for ${userId}. Redirecting to /claim/write`);
+    redirect("/claim/write");
+  } else {
+    redirect("/");
+  }
 }
 
 export async function logoutAction() {
