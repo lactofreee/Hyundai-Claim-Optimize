@@ -43,7 +43,7 @@ export default function DocsGuidePage() {
           </div>
           <div className="relative">
             <Car className="w-12 h-12 text-slate-300" />
-            <AlertCircle className="w-5 h-5 text-[#635BFF] absolute -top-1 -right-1 fill-white" />
+            <AlertCircle className="w-5 h-5 text-primary absolute -top-1 -right-1 fill-white" />
           </div>
         </div>
 
@@ -120,7 +120,7 @@ function Section({ title, description, buttonText, onClick }: { title: string, d
       </div>
       <Button
         variant="outline"
-        className="w-full h-12 text-base font-bold text-[#635BFF] border-[#635BFF] hover:bg-indigo-50 hover:text-[#635BFF] rounded-xl mt-2"
+        className="w-full h-12 text-base font-bold text-primary border-primary hover:bg-primary/5 hover:text-primary rounded-xl mt-2"
         onClick={onClick}
       >
         {buttonText}

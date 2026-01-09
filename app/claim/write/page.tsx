@@ -109,7 +109,7 @@ export default function ClaimWritePage() {
     return (
       <div className="w-full bg-stone-100 h-1.5 fixed top-14 left-0 z-40">
         <div
-          className="h-full bg-[#635BFF] transition-all duration-300 ease-in-out"
+          className="h-full bg-primary transition-all duration-300 ease-in-out"
           style={{ width: `${(step / 4) * 100}%` }}
         />
       </div>
@@ -136,7 +136,7 @@ export default function ClaimWritePage() {
           ) : null}
           <h1 className="font-bold text-lg tracking-tight">{step === 4 ? "청구 완료" : "보험금 청구"}</h1>
         </div>
-        <div className="text-sm font-bold text-[#635BFF]">
+        <div className="text-sm font-bold text-primary">
           {step < 4 && `${step} / 3`}
         </div>
       </header>
@@ -179,7 +179,7 @@ export default function ClaimWritePage() {
                   <Input
                     value={formData.rrnFront}
                     onChange={(e) => handleChange("rrnFront", e.target.value)}
-                    className="h-14 rounded-xl text-lg text-center tracking-widest bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                    className="h-14 rounded-xl text-lg text-center tracking-widest bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                     placeholder="생년월일 6자리"
                     maxLength={6}
                     inputMode="numeric"
@@ -189,7 +189,7 @@ export default function ClaimWritePage() {
                     <Input
                       value={formData.rrnBack}
                       onChange={(e) => handleChange("rrnBack", e.target.value)}
-                      className="h-14 rounded-xl text-lg text-center tracking-widest w-14 px-0 bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                      className="h-14 rounded-xl text-lg text-center tracking-widest w-14 px-0 bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                       placeholder="1"
                       maxLength={1}
                       inputMode="numeric"
@@ -209,7 +209,7 @@ export default function ClaimWritePage() {
                   id="address"
                   value={formData.address}
                   onChange={(e) => handleChange("address", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                   placeholder="예) 서울시 강남구 테헤란로 123"
                 />
                 {fieldErrors.address && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.address[0]}</p>}
@@ -221,7 +221,7 @@ export default function ClaimWritePage() {
                   id="job"
                   value={formData.job}
                   onChange={(e) => handleChange("job", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                   placeholder="직장명을 입력해 주세요"
                 />
                 {fieldErrors.job && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.job[0]}</p>}
@@ -248,7 +248,7 @@ export default function ClaimWritePage() {
                   type="datetime-local"
                   value={formData.accidentDate}
                   onChange={(e) => handleChange("accidentDate", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF] block w-full"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary block w-full"
                 />
               </div>
 
@@ -258,7 +258,7 @@ export default function ClaimWritePage() {
                   id="accidentLocation"
                   value={formData.accidentLocation}
                   onChange={(e) => handleChange("accidentLocation", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                   placeholder="예) 강남역 사거리"
                 />
                 {fieldErrors.accidentLocation && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.accidentLocation[0]}</p>}
@@ -267,7 +267,7 @@ export default function ClaimWritePage() {
               <div className="space-y-3">
                 <Label className="text-base font-semibold text-slate-700 mb-1 block">사고 형태</Label>
                 <Select onValueChange={(val) => handleChange("accidentType", val)}>
-                  <SelectTrigger className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:ring-[#635BFF]">
+                  <SelectTrigger className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:ring-primary">
                     <SelectValue placeholder="사고 유형 선택" />
                   </SelectTrigger>
                   <SelectContent className="bg-white shadow-xl border-stone-200 z-50">
@@ -285,7 +285,7 @@ export default function ClaimWritePage() {
                   id="accidentDesc"
                   value={formData.accidentDesc}
                   onChange={(e) => handleChange("accidentDesc", e.target.value)}
-                  className="min-h-[140px] rounded-xl text-base resize-none bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF] p-4 leading-relaxed"
+                  className="min-h-[140px] rounded-xl text-base resize-none bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary p-4 leading-relaxed"
                   placeholder="사고 상황을 구체적으로 설명해 주세요."
                 />
                 {fieldErrors.accidentDesc && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.accidentDesc[0]}</p>}
@@ -308,7 +308,7 @@ export default function ClaimWritePage() {
               <div className="space-y-3">
                 <Label className="text-base font-semibold text-slate-700 mb-1 block">부상 부위</Label>
                 <Select onValueChange={(val) => handleChange("injuryPart", val)}>
-                  <SelectTrigger className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:ring-[#635BFF]">
+                  <SelectTrigger className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:ring-primary">
                     <SelectValue placeholder="주요 부상 부위 선택" />
                   </SelectTrigger>
                   <SelectContent className="bg-white shadow-xl border-stone-200 z-50">
@@ -329,7 +329,7 @@ export default function ClaimWritePage() {
                   id="hospitalName"
                   value={formData.hospitalName}
                   onChange={(e) => handleChange("hospitalName", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                   placeholder="병원 이름 입력"
                 />
                 {fieldErrors.hospitalName && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.hospitalName[0]}</p>}
@@ -341,7 +341,7 @@ export default function ClaimWritePage() {
                   id="hospitalLocation"
                   value={formData.hospitalLocation}
                   onChange={(e) => handleChange("hospitalLocation", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF]"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary"
                   placeholder="예) 서울 강남구"
                 />
                 {fieldErrors.hospitalLocation && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.hospitalLocation[0]}</p>}
@@ -354,11 +354,11 @@ export default function ClaimWritePage() {
                   onValueChange={(val) => handleChange("treatmentType", val)}
                   className="flex gap-4"
                 >
-                  <div className="flex items-center space-x-2 border border-stone-200 bg-white rounded-xl p-4 flex-1 has-[[data-state=checked]]:border-[#635BFF] has-[[data-state=checked]]:bg-indigo-50 transition-all cursor-pointer shadow-sm">
+                  <div className="flex items-center space-x-2 border border-stone-200 bg-white rounded-xl p-4 flex-1 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5 transition-all cursor-pointer shadow-sm">
                     <RadioGroupItem value="outpatient" id="outpatient" />
                     <Label htmlFor="outpatient" className="flex-1 cursor-pointer font-medium">통원</Label>
                   </div>
-                  <div className="flex items-center space-x-2 border border-stone-200 bg-white rounded-xl p-4 flex-1 has-[[data-state=checked]]:border-[#635BFF] has-[[data-state=checked]]:bg-indigo-50 transition-all cursor-pointer shadow-sm">
+                  <div className="flex items-center space-x-2 border border-stone-200 bg-white rounded-xl p-4 flex-1 has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5 transition-all cursor-pointer shadow-sm">
                     <RadioGroupItem value="inpatient" id="inpatient" />
                     <Label htmlFor="inpatient" className="flex-1 cursor-pointer font-medium">입원</Label>
                   </div>
@@ -372,7 +372,7 @@ export default function ClaimWritePage() {
                   type="date"
                   value={formData.firstVisitDate}
                   onChange={(e) => handleChange("firstVisitDate", e.target.value)}
-                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-[#635BFF] focus:ring-[#635BFF] block w-full"
+                  className="h-14 rounded-xl text-base bg-white shadow-sm border-stone-200 focus:border-primary focus:ring-primary block w-full"
                 />
                 {fieldErrors.firstVisitDate && <p className="text-xs text-red-500 mt-1 font-medium">{fieldErrors.firstVisitDate[0]}</p>}
               </div>
@@ -423,15 +423,15 @@ export default function ClaimWritePage() {
                 </CardContent>
               </Card>
 
-              <div className="mt-4 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50">
-                <p className="text-[11px] text-indigo-600 font-bold leading-normal">
+              <div className="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                <p className="text-[11px] text-primary font-bold leading-normal">
                   💡 사고 사진을 등록하시면 보상 처리가 빨라집니다.
                 </p>
               </div>
 
               {/* Action Button moved inside for step 4 balance */}
               <Button
-                className="w-full h-14 text-lg font-bold rounded-2xl bg-slate-900 hover:bg-slate-800 shadow-xl mt-12 mb-8"
+                className="w-full h-14 bg-primary text-lg font-bold rounded-2xl hover:bg-primary/40 shadow-xl mt-12 mb-8"
                 onClick={() => router.push("/")}
               >
                 메인으로 돌아가기
@@ -446,7 +446,7 @@ export default function ClaimWritePage() {
       {step < 4 && (
         <div className="sticky bottom-0 bg-white/80 backdrop-blur-md border-t border-stone-200 p-4 safe-area-bottom">
           <Button
-            className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-xl shadow-indigo-200"
+            className="w-full h-14 text-lg font-bold rounded-xl bg-primary hover:opacity-90 shadow-xl shadow-primary/20"
             onClick={handleNext}
             disabled={isSubmitting}
           >

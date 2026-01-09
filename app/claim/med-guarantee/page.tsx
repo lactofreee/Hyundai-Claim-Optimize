@@ -139,7 +139,7 @@ export default function MedGuaranteePage() {
               >
                 <div className={cn(
                   "flex items-center justify-between space-x-2 border rounded-xl p-4 cursor-pointer transition-all hover:bg-slate-50",
-                  treatmentMethod === "outpatient" ? "border-[#635BFF] bg-indigo-50/50" : "border-stone-200",
+                  treatmentMethod === "outpatient" ? "border-primary bg-primary/5" : "border-stone-200",
                   errors.treatmentMethod && "border-red-500 bg-red-50"
                 )}>
                   <Label htmlFor="r1" className="flex-1 cursor-pointer font-medium">통원 치료</Label>
@@ -147,7 +147,7 @@ export default function MedGuaranteePage() {
                 </div>
                 <div className={cn(
                   "flex items-center justify-between space-x-2 border rounded-xl p-4 cursor-pointer transition-all hover:bg-slate-50",
-                  treatmentMethod === "inpatient" ? "border-[#635BFF] bg-indigo-50/50" : "border-stone-200",
+                  treatmentMethod === "inpatient" ? "border-primary bg-primary/5" : "border-stone-200",
                   errors.treatmentMethod && "border-red-500 bg-red-50"
                 )}>
                   <Label htmlFor="r2" className="flex-1 cursor-pointer font-medium">입원 치료</Label>
@@ -172,7 +172,7 @@ export default function MedGuaranteePage() {
                     setErrors(prev => ({ ...prev, hospitalName: false }))
                   }}
                   className={cn(
-                    "h-12 text-base rounded-xl transition-all focus-visible:ring-[#635BFF]",
+                    "h-12 text-base rounded-xl transition-all focus-visible:ring-primary",
                     errors.hospitalName ? "border-red-500 focus-visible:ring-red-500" : "border-stone-200"
                   )}
                 />
@@ -192,7 +192,7 @@ export default function MedGuaranteePage() {
                 placeholder="02-1234-5678"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="h-12 text-base rounded-xl border-stone-200 focus-visible:ring-[#635BFF]"
+                className="h-12 text-base rounded-xl border-stone-200 focus-visible:ring-primary"
               />
             </div>
 
@@ -211,7 +211,7 @@ export default function MedGuaranteePage() {
                   setErrors(prev => ({ ...prev, faxNumber: false }))
                 }}
                 className={cn(
-                  "h-12 text-base rounded-xl transition-all focus-visible:ring-[#635BFF]",
+                  "h-12 text-base rounded-xl transition-all focus-visible:ring-primary",
                   errors.faxNumber ? "border-red-500 focus-visible:ring-red-500" : "border-stone-200"
                 )}
               />
@@ -228,7 +228,7 @@ export default function MedGuaranteePage() {
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-stone-100 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
         <div className="max-w-xl mx-auto">
           <Button
-            className="w-full h-14 text-lg font-bold bg-[#635BFF] hover:bg-[#534be0] rounded-xl shadow-lg shadow-indigo-100"
+            className="w-full h-14 text-lg font-bold bg-primary hover:opacity-90 rounded-xl shadow-lg shadow-primary/20"
             onClick={handleSubmit}
           >
             지급보증서 요청하기

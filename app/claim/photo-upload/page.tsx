@@ -141,7 +141,7 @@ export default function PhotoUploadPage() {
         <div
           onClick={triggerFileInput}
           className={cn(
-            "bg-white border-2 border-dashed border-stone-300 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#635BFF] hover:bg-slate-50 transition-all group min-h-[240px]",
+            "bg-white border-2 border-dashed border-stone-300 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-primary hover:bg-slate-50 transition-all group min-h-[240px]",
             isUploading && "opacity-50 cursor-not-allowed"
           )}
         >
@@ -157,13 +157,13 @@ export default function PhotoUploadPage() {
 
           <div className="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center group-hover:scale-110 transition-transform">
             {isUploading ? (
-              <Loader2 className="w-8 h-8 text-[#635BFF] animate-spin" />
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
             ) : (
-              <Camera className="w-8 h-8 text-stone-400 group-hover:text-[#635BFF]" />
+              <Camera className="w-8 h-8 text-stone-400 group-hover:text-primary" />
             )}
           </div>
           <div className="text-center space-y-1">
-            <p className="font-bold text-slate-700 group-hover:text-[#635BFF]">
+            <p className="font-bold text-slate-700 group-hover:text-primary">
               {isUploading ? "업로드 중..." : "사진/동영상 추가하기"}
             </p>
             <p className="text-xs text-stone-400">터치하여 앨범에서 선택하거나 촬영하세요</p>
@@ -174,7 +174,7 @@ export default function PhotoUploadPage() {
         {uploadStatus && (
           <p className={cn(
             "text-sm text-center font-medium",
-            uploadStatus.includes("오류") ? "text-red-500" : "text-[#635BFF]"
+            uploadStatus.includes("오류") ? "text-red-500" : "text-primary"
           )}>
             {uploadStatus}
           </p>
@@ -226,7 +226,7 @@ export default function PhotoUploadPage() {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="사고 현장, 접촉 부위, 손상 범위 등에 대해 설명해 주세요."
-              className="resize-none h-24 rounded-xl bg-stone-50 border-stone-200 focus-visible:ring-[#635BFF] text-base"
+              className="resize-none h-24 rounded-xl bg-stone-50 border-stone-200 focus-visible:ring-primary text-base"
               disabled={isUploading}
             />
           </div>
@@ -235,7 +235,7 @@ export default function PhotoUploadPage() {
             className={cn(
               "w-full h-14 text-lg font-bold rounded-xl shadow-lg transition-all",
               files.length > 0 && !isUploading
-                ? "bg-[#635BFF] hover:bg-[#534be0] shadow-indigo-200 text-white"
+                ? "bg-primary hover:opacity-90 shadow-primary/20 text-white"
                 : "bg-stone-200 text-stone-400 hover:bg-stone-200 shadow-none cursor-not-allowed"
             )}
             onClick={handleSubmit}

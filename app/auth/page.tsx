@@ -41,8 +41,8 @@ export default function AuthPage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 space-y-8">
 
         <div className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
-            <ShieldCheck className="w-8 h-8 text-[#635BFF]" />
+          <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <ShieldCheck className="w-8 h-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">본인인증</h1>
           <p className="text-slate-500">

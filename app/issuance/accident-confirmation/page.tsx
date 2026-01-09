@@ -37,10 +37,10 @@ export default function AccidentConfirmationPage() {
 
         {/* Accident Info Card */}
         <Card className="border-none shadow-lg bg-white overflow-hidden rounded-3xl">
-          <div className="h-2 bg-[#635BFF] w-full" />
+          <div className="h-2 bg-primary w-full" />
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <FileText className="w-5 h-5 text-[#635BFF]" />
+              <FileText className="w-5 h-5 text-primary" />
               사고 정보
             </CardTitle>
           </CardHeader>
@@ -83,15 +83,15 @@ export default function AccidentConfirmationPage() {
 
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-stone-100 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                <FileCheck className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center">
+                <FileCheck className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="font-bold text-slate-900">자동차 사고 사실 확인</p>
-                <p className="text-xs text-blue-600 font-medium mt-0.5">발급 가능</p>
+                <p className="text-xs text-primary font-medium mt-0.5">발급 가능</p>
               </div>
             </div>
-            <CheckCircle2 className="w-6 h-6 text-blue-500" />
+            <CheckCircle2 className="w-6 h-6 text-primary" />
           </div>
 
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-stone-100 flex items-center justify-between opacity-60">
@@ -112,7 +112,7 @@ export default function AccidentConfirmationPage() {
 
       {/* Bottom CTA */}
       <div className="sticky bottom-0 bg-white border-t border-stone-100 p-4 safe-area-bottom">
-        <Button className="w-full h-14 text-lg font-bold rounded-xl bg-[#635BFF] hover:bg-[#534be0] shadow-lg shadow-indigo-200">
+        <Button className="w-full h-14 text-lg font-bold rounded-xl bg-primary hover:opacity-90 shadow-lg shadow-primary/20">
           선택한 증명서 발급하기
         </Button>
       </div>
