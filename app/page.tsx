@@ -30,7 +30,7 @@ export default async function Home() {
     <main className="h-[100dvh] bg-stone-100 flex flex-col font-sans text-slate-900 overflow-hidden md:h-screen">
 
       {/* Decorative Header Background */}
-      <div className="fixed top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#FDE4E4] to-[#F2DGD9]/0 -z-10 opacity-60" />
+      <div className="fixed top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#FFF7ED] to-[#FFF7ED]/0 -z-10 opacity-60" />
 
       {/* Main Container */}
       <div className="w-full max-w-7xl mx-auto md:p-6 lg:p-8 flex-1 flex flex-col h-full overflow-hidden">
@@ -44,9 +44,6 @@ export default async function Home() {
             {/* Desktop Dashboard Header */}
             <header className="flex justify-between items-center mb-6 px-1 shrink-0">
               <h1 className="text-2xl font-black tracking-tight">현대해상</h1>
-              <button className="p-2 hover:bg-black/5 rounded-full transition-colors">
-                <Menu className="w-6 h-6" />
-              </button>
             </header>
 
             <h2 className="text-lg font-bold mb-4 px-1 shrink-0">사고 처리 현황</h2>
@@ -54,8 +51,8 @@ export default async function Home() {
           </section>
 
           {/* AI Assistant Panel (Right) */}
-          <section className="col-span-12 md:col-span-5 lg:col-span-4 bg-white rounded-3xl shadow-lg border border-indigo-50 flex flex-col overflow-hidden relative">
-            <div className="flex-1 flex flex-col h-full bg-gradient-to-b from-indigo-50/30 to-white overflow-hidden">
+          <section className="col-span-12 md:col-span-5 lg:col-span-4 bg-white rounded-3xl shadow-lg border border-primary/10 flex flex-col overflow-hidden relative">
+            <div className="flex-1 flex flex-col h-full bg-gradient-to-b from-primary/5 to-white overflow-hidden">
               <ChatbotView />
             </div>
           </section>
@@ -86,9 +83,6 @@ export default async function Home() {
                 {/* Mobile Dashboard Header */}
                 <header className="flex justify-between items-center mb-6 px-1">
                   <h1 className="text-2xl font-black tracking-tight">현대해상</h1>
-                  <button className="p-2 hover:bg-black/5 rounded-full transition-colors">
-                    <Menu className="w-6 h-6" />
-                  </button>
                 </header>
                 <DashboardView />
               </TabsContent>

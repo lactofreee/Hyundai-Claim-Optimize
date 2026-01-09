@@ -56,7 +56,7 @@ export function DashboardView() {
               <div className="space-y-1">
                 <p className="font-medium text-lg">김현대 매니저</p>
                 <div
-                  className="flex items-center gap-1 text-blue-600 cursor-pointer hover:underline"
+                  className="flex items-center gap-1 text-primary cursor-pointer hover:underline"
                   onClick={() => setIsCallDrawerOpen(true)}
                 >
                   <Phone className="w-3.5 h-3.5" />
@@ -82,14 +82,14 @@ export function DashboardView() {
                   <RotateCcw className="w-3 h-3" />
                 </Button>
               </div>
-              <span className="text-sm font-bold text-blue-600">{['접수', '피해', '치료', '보험금 지급', '치료비 지급'][currentStep]} ({currentStep + 1}/5)</span>
+              <span className="text-sm font-bold text-primary">{['접수', '피해', '치료', '보험금 지급', '치료비 지급'][currentStep]} ({currentStep + 1}/5)</span>
             </div>
 
             <div className="relative px-2">
               {/* Background Line */}
               <div className="absolute top-[9px] left-0 w-full h-[2px] bg-slate-100" />
               {/* Active Progress Line */}
-              <div className="absolute top-[9px] left-0 h-[2px] bg-blue-500 transition-all duration-300" style={{ width: `${(currentStep / 4) * 100}%` }} />
+              <div className="absolute top-[9px] left-0 h-[2px] bg-primary transition-all duration-300" style={{ width: `${(currentStep / 4) * 100}%` }} />
 
               {/* Nodes */}
               <div className="relative flex justify-between">
@@ -101,15 +101,15 @@ export function DashboardView() {
                     <div key={i} className="flex flex-col items-center gap-2">
                       <div className={cn(
                         "w-5 h-5 rounded-full border-2 flex items-center justify-center bg-white z-10 transition-all box-border",
-                        isCompleted ? "border-blue-500" : "border-slate-200"
+                        isCompleted ? "border-primary" : "border-slate-200"
                       )}>
                         {isCompleted && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                         )}
                       </div>
                       <span className={cn(
                         "text-[11px] font-medium text-center whitespace-pre-line leading-tight",
-                        isCompleted ? "text-blue-600 font-bold" : "text-slate-400"
+                        isCompleted ? "text-primary font-bold" : "text-slate-400"
                       )}>{label}</span>
                     </div>
                   )
@@ -217,7 +217,7 @@ export function DashboardView() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-center p-8 bg-zinc-50 rounded-full w-24 h-24 mx-auto mb-4">
-                <Phone className="w-10 h-10 text-blue-600" />
+                <Phone className="w-10 h-10 text-primary" />
               </div>
               <div className="text-center space-y-1">
                 <p className="text-2xl font-bold">010-1234-5678</p>

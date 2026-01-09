@@ -23,7 +23,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
       <div className={cn("space-y-4", isMessage ? "mb-2" : "mb-8")}>
         {!isMessage && (
           <div className="mb-8 flex justify-start">
-            <div className="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0">
               <Bot className="w-7 h-7 text-white" />
             </div>
           </div>
@@ -31,20 +31,20 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
         <div className="space-y-2">
           {(() => {
             let title = <>{userName}님,<br />많이 놀라셨죠?</>;
-            let desc = <>갑작스러운 사고로 경황이 없으실 텐데,<br />저희가 <span className="text-[#635BFF] font-bold">가장 먼저 도와드려야 할 일</span>을<br />찾아보았습니다.</>;
+            let desc = <>갑작스러운 사고로 경황이 없으실 텐데,<br />저희가 <span className="text-primary font-bold">가장 먼저 도와드려야 할 일</span>을<br />찾아보았습니다.</>;
 
             if (completedTasks.includes("claim-write") && !completedTasks.includes("photo-upload")) {
               title = <>청구서가<br />잘 접수되었습니다.</>;
-              desc = <>신속한 보상 처리를 위해<br /><span className="text-[#635BFF] font-bold">현장 상황을 확인할 수 있는 사진</span>을<br />등록해 주시면 큰 도움이 됩니다.</>;
+              desc = <>신속한 보상 처리를 위해<br /><span className="text-primary font-bold">현장 상황을 확인할 수 있는 사진</span>을<br />등록해 주시면 큰 도움이 됩니다.</>;
             } else if (completedTasks.includes("photo-upload") && !completedTasks.includes("docs-guide")) {
               title = <>꼼꼼하게<br />기록해 주셨네요.</>;
-              desc = <>보내주신 자료는 잘 전달되었습니다.<br />이제 <span className="text-[#635BFF] font-bold">필요한 서류</span>가 무엇인지<br />함께 확인해 볼까요?</>;
+              desc = <>보내주신 자료는 잘 전달되었습니다.<br />이제 <span className="text-primary font-bold">필요한 서류</span>가 무엇인지<br />함께 확인해 볼까요?</>;
             } else if (completedTasks.includes("docs-guide") && !completedTasks.includes("med-guarantee")) {
               title = <>치료에만<br />집중해 주세요.</>;
-              desc = <>복잡한 병원비 걱정 없으시도록<br /><span className="text-[#635BFF] font-bold">진료비 지급보증서</span>를<br />병원으로 바로 보내드리겠습니다.</>;
+              desc = <>복잡한 병원비 걱정 없으시도록<br /><span className="text-primary font-bold">진료비 지급보증서</span>를<br />병원으로 바로 보내드리겠습니다.</>;
             } else if (completedTasks.includes("med-guarantee")) {
               title = <>모든 준비가<br />완료되었습니다.</>;
-              desc = <>이제부터는 <span className="text-[#635BFF] font-bold">김현대 매니저</span>가<br />고객님의 든든한 파트너가 되어<br />남은 절차를 책임지겠습니다.</>;
+              desc = <>이제부터는 <span className="text-primary font-bold">김현대 매니저</span>가<br />고객님의 든든한 파트너가 되어<br />남은 절차를 책임지겠습니다.</>;
             }
 
             return (
@@ -72,7 +72,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
         <div className="w-full bg-slate-50 rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors border border-slate-100" onClick={() => handleAction("/claim/write")}>
           <div className="flex-1">
             <p className="font-bold text-base text-slate-900 mb-0.5">보험금 청구서 작성 하기</p>
-            <p className="text-xs text-[#635BFF] font-bold">바로가기 {'>'}</p>
+            <p className="text-xs text-primary font-bold">바로가기 {'>'}</p>
           </div>
           <div className="flex gap-1 opacity-20 shrink-0 ml-2">
             <div className="w-5 h-5 bg-slate-400 rounded-full" />
@@ -85,7 +85,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
         <div className="w-full bg-slate-50 rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors border border-slate-100" onClick={() => handleAction("/claim/photo-upload")}>
           <div className="flex-1">
             <p className="font-bold text-base text-slate-900 mb-0.5">사고 사진 등록하기</p>
-            <p className="text-xs text-[#635BFF] font-bold">사진 업로드 {'>'}</p>
+            <p className="text-xs text-primary font-bold">사진 업로드 {'>'}</p>
           </div>
           <div className="flex gap-1 opacity-20 shrink-0 ml-2">
             <div className="w-5 h-5 bg-slate-400 rounded-md" />
@@ -97,7 +97,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
         <div className="w-full bg-slate-50 rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors border border-slate-100" onClick={() => handleAction("/claim/docs-guide")}>
           <div className="flex-1">
             <p className="font-bold text-base text-slate-900 mb-0.5">보험금 청구 제출서류 안내</p>
-            <p className="text-xs text-[#635BFF] font-bold">서류 제출 안내 가기 {'>'}</p>
+            <p className="text-xs text-primary font-bold">서류 제출 안내 가기 {'>'}</p>
           </div>
           <div className="flex gap-1 opacity-20 shrink-0 ml-2">
             <div className="w-5 h-5 bg-slate-400 rounded-md" />
@@ -110,7 +110,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
         <div className="w-full bg-slate-50 rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors border border-slate-100" onClick={() => handleAction("/claim/med-guarantee")}>
           <div className="flex-1">
             <p className="font-bold text-base text-slate-900 mb-0.5">진료비 지급보증서 요청하기</p>
-            <p className="text-xs text-[#635BFF] font-bold">요청 화면 가기 {'>'}</p>
+            <p className="text-xs text-primary font-bold">요청 화면 가기 {'>'}</p>
           </div>
           <div className="flex gap-1 opacity-20 shrink-0 ml-2">
             <div className="w-5 h-5 bg-slate-400 rounded-full" />
@@ -157,7 +157,7 @@ export function ChatGuide({ onActionClick, isMessage = false }: { onActionClick?
 
                   <div className={cn(
                     "relative z-10 w-5 h-5 rounded-full border flex items-center justify-center transition-colors bg-white",
-                    isDone ? "border-slate-800 bg-slate-800" : "border-stone-200"
+                    isDone ? "border-primary bg-primary" : "border-stone-200"
                   )}>
                     {isDone ? (
                       <Check className="w-2.5 h-2.5 text-white" />

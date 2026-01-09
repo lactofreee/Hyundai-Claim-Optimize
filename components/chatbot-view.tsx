@@ -157,9 +157,9 @@ export function ChatbotView() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-stone-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-primary" />
           <h3 className="font-bold text-slate-800 flex items-center gap-2 text-sm md:text-base">
-            <MessageSquare className="w-4 h-4 text-indigo-500" />
+            <MessageSquare className="w-4 h-4 text-primary" />
             AI 보험 전문가
           </h3>
         </div>
@@ -181,7 +181,7 @@ export function ChatbotView() {
               <div
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1",
-                  message.role === "user" ? "bg-gray-200" : "bg-[#635BFF]"
+                  message.role === "user" ? "bg-gray-200" : "bg-primary"
                 )}
               >
                 {message.role === "user" ? (
@@ -193,7 +193,7 @@ export function ChatbotView() {
 
               {/* Message Bubble or Widget */}
               {message.content === "GUIDE_WIDGET" ? (
-                <div className="bg-white border border-indigo-100 p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[90%] w-full">
+                <div className="bg-white border border-primary/10 p-5 rounded-2xl rounded-tl-none shadow-sm max-w-[90%] w-full">
                   <ChatGuide isMessage={true} />
                 </div>
               ) : (
@@ -202,7 +202,7 @@ export function ChatbotView() {
                     "px-4 py-3 rounded-2xl max-w-[80%] text-sm leading-relaxed whitespace-pre-wrap shadow-sm",
                     message.role === "user"
                       ? "bg-gray-100 text-gray-900 rounded-tr-none"
-                      : "bg-white border border-indigo-100 text-slate-800 rounded-tl-none"
+                      : "bg-white border border-primary/10 text-slate-800 rounded-tl-none"
                   )}
                 >
                   {message.content}
@@ -213,13 +213,13 @@ export function ChatbotView() {
 
           {isLoading && (
             <div className="flex w-full items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#635BFF] flex items-center justify-center shrink-0 mt-1">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 mt-1">
                 <Bot className="w-5 h-5 text-white" />
               </div>
-              <div className="px-4 py-3 rounded-2xl bg-white border border-indigo-100 rounded-tl-none shadow-sm flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="px-4 py-3 rounded-2xl bg-white border border-primary/10 rounded-tl-none shadow-sm flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 rounded-full bg-primary/60 animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           )}
@@ -235,12 +235,12 @@ export function ChatbotView() {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="궁금한 내용을 입력해주세요"
-            className="h-14 rounded-2xl bg-muted/60 border-transparent text-lg placeholder:text-muted-foreground/70 focus-visible:bg-white focus-visible:ring-purple-500 transition-all shadow-sm pr-12 pl-4"
+            className="h-14 rounded-2xl bg-muted/60 border-transparent text-lg placeholder:text-muted-foreground/70 focus-visible:bg-white focus-visible:ring-primary transition-all shadow-sm pr-12 pl-4"
           />
 
           <Button
             size="icon"
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-xl bg-[#635BFF] hover:bg-[#534be0]"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-xl bg-primary hover:bg-primary/90"
             onClick={() => handleSendMessage(inputValue)}
             disabled={!inputValue.trim() || isLoading}
           >

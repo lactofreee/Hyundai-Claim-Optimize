@@ -83,7 +83,7 @@ export default function AuthPage() {
 
           <Button
             type="submit"
-            className="w-full h-14 text-lg font-bold bg-[#635BFF] hover:bg-[#534be0] rounded-xl shadow-lg mt-4"
+            className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 rounded-xl shadow-lg mt-4"
             disabled={isLoading || !name || phone.length < 10}
           >
             {isLoading ? "인증 중..." : "인증하고 시작하기"}

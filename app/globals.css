@@ -15,36 +15,36 @@
   --surface-variant: oklch(0.92 0.01 240);
   --on-surface-variant: oklch(0.4 0.02 240);
 
-  /* Brand Colors */
-  --primary: oklch(0.55 0.2 260);
+  /* Brand Colors (#EA7404) */
+  --primary: oklch(0.65 0.22 45);
   --on-primary: oklch(0.99 0 0);
-  --primary-container: oklch(0.9 0.05 260);
-  --on-primary-container: oklch(0.3 0.1 260);
+  --primary-container: oklch(0.92 0.08 75);
+  --on-primary-container: oklch(0.3 0.15 45);
 
-  /* Secondary Colors */
-  --secondary: oklch(0.4 0.05 240);
-  --on-secondary: oklch(0.99 0 0);
+  /* Secondary Colors (#F7D197) */
+  --secondary: oklch(0.88 0.1 75);
+  --on-secondary: oklch(0.2 0.05 45);
 
   /* UI States */
   --error: oklch(0.6 0.18 25);
   --on-error: oklch(0.99 0 0);
-  --success: oklch(0.6 0.15 145);
-  --on-success: oklch(0.99 0 0);
+  --success: oklch(0.7 0.15 145);
+  --on-success: oklch(0.3 0.1 145);
   
   /* Legacy/Shadcn Aliases */
   --muted: var(--surface-variant);
   --muted-foreground: var(--on-surface-variant);
-  --accent: var(--surface-variant);
-  --accent-foreground: var(--on-surface);
+  --accent: var(--secondary);
+  --accent-foreground: var(--on-secondary);
   --card: var(--surface);
   --card-foreground: var(--on-surface);
   --popover: var(--surface);
   --popover-foreground: var(--on-surface);
 
   /* Others */
-  --border: oklch(0.92 0.01 240);
-  --input: oklch(0.92 0.01 240);
-  --ring: oklch(0.55 0.2 260 / 0.5);
+  --border: oklch(0.92 0.01 45);
+  --input: oklch(0.92 0.01 45);
+  --ring: oklch(0.65 0.22 45 / 0.5);
   --radius: 0.75rem;
 
   --chart-1: oklch(0.646 0.222 41.116);
